@@ -3,15 +3,29 @@
 async function loadSequenceTypes() {
     try {
         const response = await fetch(`${API_CONFIG.sequenceApi}/api/sequence_types`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
         const types = await response.json();
         const sequenceTypeSelect = document.getElementById('sequenceType');
         
+        // Clear existing options
+        sequenceTypeSelect.innerHTML = '';
+        
+        // Add a default option
+        const defaultOption = document.createElement('option');
+        defaultOption.value = '';
+        defaultOption.textContent = 'Select a sequence type';
+        sequenceTypeSelect.appendChild(defaultOption);
+
         types.forEach(type => {
             const option = document.createElement('option');
             option.value = type;
             option.textContent = type.charAt(0).toUpperCase() + type.slice(1);
             sequenceTypeSelect.appendChild(option);
         });
+
+        console.log('Sequence types loaded successfully');
     } catch (error) {
         console.error('Error loading sequence types:', error);
     }
@@ -66,10 +80,14 @@ async function generateSequence() {
     }
 }
 
-document.addEventListener('DOMContentLoaded', (event) => {
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM fully loaded. Initializing sequence generator...');
     loadSequenceTypes();
     const generateButton = document.getElementById('generateSequenceButton');
     if (generateButton) {
         generateButton.addEventListener('click', generateSequence);
+        console.log('Generate button event listener added');
+    } else {
+        console.error('Generate button not found');
     }
 });

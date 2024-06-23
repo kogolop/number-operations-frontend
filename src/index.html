@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number Operations Suite</title>
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <h1>Number Operations, Statistics, Search, Conversions, and Sequences</h1>
+    
+    <h2>Statistics</h2>
+    <input type="text" id="statsInput" placeholder="Enter numbers separated by commas">
+    <button onclick="calculateStats()">Calculate Statistics</button>
+
+    <h2>Operations</h2>
+    <select id="operation">
+        <option value="add">Addition</option>
+        <option value="subtract">Subtraction</option>
+        <option value="multiply">Multiplication</option>
+        <option value="divide">Division</option>
+        <option value="power">Exponentiation</option>
+    </select>
+    <input type="text" id="opsInput" placeholder="Enter numbers separated by commas">
+    <button onclick="performOperation()">Perform Operation</button>
+
+    <h2>First Occurrence Search</h2>
+    <p>Enter a number to search in a randomly generated list:</p>
+    <input type="number" id="searchInput" placeholder="Enter a number to search">
+    <button onclick="searchFirstOccurrence()">Search</button>
+    <div id="numberList"></div>
+
+    <h2>Unit Conversion</h2>
+    <input type="number" id="conversionValue" placeholder="Enter value to convert">
+    <select id="fromUnit"></select>
+    <select id="toUnit"></select>
+    <button onclick="convertUnit()">Convert</button>
+
+    <h2>Sequence Generation</h2>
+    <select id="sequenceType"></select>
+    <input type="number" id="sequenceCount" placeholder="Number of terms" value="10">
+    <input type="number" id="sequenceStart" placeholder="Start value (for arithmetic/geometric)">
+    <input type="number" id="sequenceStep" placeholder="Step/Ratio (for arithmetic/geometric)">
+    <button onclick="generateSequence()">Generate Sequence</button>
+    <div id="sequenceResult"></div>
+
+    <div id="result"></div>
+
+    <script src="config.js"></script>
+    <script src="scripts/stats.js"></script>
+    <script src="scripts/operations.js"></script>
+    <script src="scripts/firstoccur.js"></script>
+    <script src="scripts/conversion.js"></script>
+    <script src="scripts/sequence.js"></script>
+</body>
+</html>

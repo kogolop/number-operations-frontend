@@ -5,7 +5,8 @@ const API_CONFIG = {
     operationsApi: 'http://127.0.0.1:5002',
     searchApi: 'http://127.0.0.1:5003',
     conversionApi: 'http://127.0.0.1:5004',
-    sequenceApi: 'http://127.0.0.1:5005'
+    sequenceApi: 'http://127.0.0.1:5005',
+    authApi: 'http://127.0.0.1:5006'
 };
 
 // If you're using ES6 modules, you might want to export it like this:

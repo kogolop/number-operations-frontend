@@ -1,5 +1,3 @@
-// src/scripts/sequence.js
-
 async function loadSequenceTypes() {
     try {
         const response = await fetch(`${API_CONFIG.sequenceApi}/api/sequence_types`);
@@ -18,6 +16,7 @@ async function loadSequenceTypes() {
         defaultOption.textContent = 'Select a sequence type';
         sequenceTypeSelect.appendChild(defaultOption);
 
+        // Add sequence types from the API
         types.forEach(type => {
             const option = document.createElement('option');
             option.value = type;
@@ -25,7 +24,7 @@ async function loadSequenceTypes() {
             sequenceTypeSelect.appendChild(option);
         });
 
-        console.log('Sequence types loaded successfully');
+        console.log('Sequence types loaded successfully:', types);
     } catch (error) {
         console.error('Error loading sequence types:', error);
     }
@@ -37,6 +36,14 @@ async function generateSequence() {
     const start = document.getElementById('sequenceStart').value;
     const step = document.getElementById('sequenceStep').value;
     const resultDiv = document.getElementById('sequenceResult');
+
+    const token = localStorage.getItem('token');
+    const maxTermsForGuests = 10; // Set the limit for non-authenticated users to 10
+
+    if (!token && parseInt(count) > maxTermsForGuests) {
+        resultDiv.innerHTML = `<p class="error">Please log in to generate sequences longer than ${maxTermsForGuests} terms.</p>`;
+        return;
+    }
 
     if (!type || !count) {
         resultDiv.innerHTML = '<p class="error">Please select a sequence type and specify the count.</p>';
@@ -54,11 +61,16 @@ async function generateSequence() {
     }
 
     try {
+        const headers = {
+            'Content-Type': 'application/json',
+        };
+        if (token) {
+            headers['Authorization'] = token;
+        }
+
         const response = await fetch(`${API_CONFIG.sequenceApi}/api/generate`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            headers: headers,
             body: JSON.stringify(data),
         });
 
@@ -80,11 +92,27 @@ async function generateSequence() {
     }
 }
 
+function updateUIForAuthStatus() {
+    const token = localStorage.getItem('token');
+    const sequenceCountInput = document.getElementById('sequenceCount');
+    const maxTermsForGuests = 10;
+
+    if (token) {
+        sequenceCountInput.removeAttribute('max');
+        sequenceCountInput.title = "No limit for authenticated users";
+    } else {
+        sequenceCountInput.max = maxTermsForGuests;
+        sequenceCountInput.title = `Maximum ${maxTermsForGuests} terms for guests. Log in for unlimited terms.`;
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM fully loaded. Initializing sequence generator...');
     loadSequenceTypes();
-    const generateButton = document.getElementById('generateSequenceButton');
+    updateUIForAuthStatus();
+    const generateButton = document.querySelector('button[onclick="generateSequence()"]');
     if (generateButton) {
+        generateButton.removeAttribute('onclick');
         generateButton.addEventListener('click', generateSequence);
         console.log('Generate button event listener added');
     } else {
